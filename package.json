@@ -17,6 +17,12 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "minify",
+    "tool",
+    "compress",
+    "optimization"
+  ],
   "activationEvents": [
     "onLanguage"
   ],
@@ -28,10 +34,33 @@
         "title": "Minify"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "minifyplus.minify",
+          "when": "configuration.minifyplus.tools.enable != 'save'",
+          "group": "1_modification"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "minifyplus.minify",
+          "when": "configuration.minifyplus.tools.enable != 'save'",
+          "group": "1_run"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "minifyplus.minify",
+          "when": "configuration.minifyplus.tools.enable != 'save'",
+          "group": "7_modification"
+        }
+      ]
+    },
     "configuration": {
       "title": "MinifyPlus",
       "properties": {
-        "minifyplus.tools.enable": {
+        "minifyplus.tools.enabled": {
           "order": 0,
           "type": "string",
           "default": "activate",
@@ -83,10 +112,10 @@
             "type": "string"
           },
           "default": {
-            "clean-css": "css",
-            "terser": "javacript"
+            "css": "clean-css",
+            "javacript": "terser"
           },
-          "description": "Assign tools to languages."
+          "markdownDescription": "Assign tools to languages and configure in `#minifyplus.tools.configuration#` (config)"
         },
         "minifyplus.tools.useConfig": {
           "order": 3,
@@ -95,7 +124,7 @@
           "markdownDescription": "Use config files for minification options. **The `#minifyplus.tools.configuration#` (config) will be ignored.**"
         },
         "minifyplus.tools.configFiles": {
-          "order": 7,
+          "order": 4,
           "type": "array",
           "items": {
             "type": "string"
@@ -107,7 +136,7 @@
           "description": "Configure glob patterns for the configuration files. The file name must contain the name of the tool."
         },
         "minifyplus.tools.configuration": {
-          "order": 4,
+          "order": 5,
           "type": "object",
           "default": {
             "clean-css": {
@@ -131,19 +160,19 @@
           "description": "Configuration for each tool. Use this to define tool-specific options (config) and override the extension settings."
         },
         "minifyplus.files.fileSuffix": {
-          "order": 5,
+          "order": 6,
           "type": "string",
           "default": ".min",
           "description": "Suffix applied to minified files."
         },
         "minifyplus.files.subfolderName": {
-          "order": 6,
+          "order": 7,
           "type": "string",
           "default": "min",
           "description": "Folder name for generated files."
         },
         "minifyplus.files.exclude": {
-          "order": 7,
+          "order": 8,
           "type": "array",
           "items": {
             "type": "string"
@@ -160,16 +189,14 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src"
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/node": "20.x",
+    "@types/node": "^22.15.1",
     "@types/vscode": "^1.102.0",
-    "@typescript-eslint/eslint-plugin": "^8.31.1",
-    "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.32.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
