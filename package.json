@@ -1,0 +1,179 @@
+{
+  "name": "minifyplus",
+  "displayName": "MinifyPlus",
+  "description": "Minify CSS, JavaScript, or configure other tools for custom minification.",
+  "version": "1.0.0",
+  "repository": "https://github.com/kallookoo/vscode-minifyplus",
+  "homepage": "https://github.com/kallookoo/vscode-minifyplus/blob/main/README.md",
+  "license": "MIT",
+  "author": {
+    "name": "Sergio (kallookoo)",
+    "url": "https://dsergio.com"
+  },
+  "publisher": "kallookoo",
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "minifyplus.minify",
+        "title": "Minify"
+      }
+    ],
+    "configuration": {
+      "title": "MinifyPlus",
+      "properties": {
+        "minifyplus.tools.enable": {
+          "order": 0,
+          "type": "string",
+          "default": "activate",
+          "enum": [
+            "save",
+            "context",
+            "activate"
+          ],
+          "enumItemLabels": [
+            "onSave",
+            "onContextMenu",
+            "onActivate"
+          ],
+          "enumDescriptions": [
+            "Minify on save.",
+            "Enable context menu to minify.",
+            "Enable all features."
+          ],
+          "description": "Turn on minification for save, context menu, or everything."
+        },
+        "minifyplus.tools.mode": {
+          "order": 1,
+          "type": "string",
+          "default": "suffixOnly",
+          "enum": [
+            "suffixOnly",
+            "subfolderOnly",
+            "suffixAndSubfolder"
+          ],
+          "enumItemLabels": [
+            "Suffix only",
+            "Subfolder only",
+            "Subfolder and Suffix"
+          ],
+          "markdownEnumDescriptions": [
+            "Suffixed file. See `#minifyplus.files.fileSuffix#`",
+            "File in subfolder. See `#minifyplus.files.subfolderName#`",
+            "Suffixed file in subfolder."
+          ],
+          "description": "Select the output style for minified files: add a suffix, use a subfolder, or combine both."
+        },
+        "minifyplus.tools.languages": {
+          "order": 2,
+          "type": "object",
+          "items": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {
+            "clean-css": "css",
+            "terser": "javacript"
+          },
+          "description": "Assign tools to languages."
+        },
+        "minifyplus.tools.useConfig": {
+          "order": 3,
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Use config files for minification options. **The `#minifyplus.tools.configuration#` (config) will be ignored.**"
+        },
+        "minifyplus.tools.configFiles": {
+          "order": 7,
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/clean-css.config.js",
+            "**/terser.config.js"
+          ],
+          "description": "Configure glob patterns for the configuration files. The file name must contain the name of the tool."
+        },
+        "minifyplus.tools.configuration": {
+          "order": 4,
+          "type": "object",
+          "default": {
+            "clean-css": {
+              "settings": {},
+              "config": {
+                "level": {
+                  "1": {
+                    "all": true
+                  }
+                }
+              }
+            },
+            "terser": {
+              "settings": {},
+              "config": {
+                "mangle": false,
+                "comments": true
+              }
+            }
+          },
+          "description": "Configuration for each tool. Use this to define tool-specific options (config) and override the extension settings."
+        },
+        "minifyplus.files.fileSuffix": {
+          "order": 5,
+          "type": "string",
+          "default": ".min",
+          "description": "Suffix applied to minified files."
+        },
+        "minifyplus.files.subfolderName": {
+          "order": 6,
+          "type": "string",
+          "default": "min",
+          "description": "Folder name for generated files."
+        },
+        "minifyplus.files.exclude": {
+          "order": 7,
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/vendor/**",
+            "**/node_modules/**"
+          ],
+          "markdownDescription": "Configure glob patterns to exclude certain files and folders. **Inherits from `#files.exclude#`**."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@types/node": "20.x",
+    "@types/vscode": "^1.102.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "clean-css": "^5.3.3",
+    "terser": "^5.43.1"
+  }
+}
