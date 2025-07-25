@@ -125,15 +125,20 @@
         },
         "minifyplus.tools.configFiles": {
           "order": 4,
-          "type": "array",
+          "type": "object",
           "items": {
             "type": "string"
           },
-          "default": [
-            "**/clean-css.config.js",
-            "**/terser.config.js"
-          ],
-          "description": "Configure glob patterns for the configuration files. The file name must contain the name of the tool."
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {
+            "**/clean-css.config.js": "clean-css",
+            "**/clean-css.config.mjs": "clean-css",
+            "**/terser.config.js": "terser",
+            "**/terser.config.mjs": "terser"
+          },
+          "description": "Configure glob patterns for the configuration files."
         },
         "minifyplus.tools.configuration": {
           "order": 5,
