@@ -1,28 +1,45 @@
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
+// @ts-check
 
-export default [{
-    files: ["**/*.ts"],
-}, {
-    plugins: {
-        "@typescript-eslint": typescriptEslint,
-    },
+import eslint from '@eslint/js';
+import prettierConfig from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 
+export default tseslint.config(
+  {
+    ignores: ['node_modules', 'dist'],
+  },
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
+  tseslint.configs.stylisticTypeChecked,
+  {
     languageOptions: {
-        parser: tsParser,
-        ecmaVersion: 2022,
-        sourceType: "module",
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
-
     rules: {
-        "@typescript-eslint/naming-convention": ["warn", {
-            selector: "import",
-            format: ["camelCase", "PascalCase"],
-        }],
-
-        curly: "warn",
-        eqeqeq: "warn",
-        "no-throw-literal": "warn",
-        semi: "warn",
+      semi: ['error', 'always'],
+      quotes: ['error', 'single'],
+      'quote-props': ['error', 'as-needed'],
+      'no-unused-vars': 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'object-curly-spacing': ['error', 'always'],
+      'comma-spacing': ['error', { before: false, after: true }],
+      indent: ['error', 2],
+      'arrow-spacing': ['error', { before: true, after: true }],
+      'comma-dangle': ['error', 'always-multiline'],
+      '@typescript-eslint/explicit-function-return-type': 'warn',
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/member-delimiter-style': [
+        'error',
+        {
+          multiline: { delimiter: 'semi', requireLast: true },
+          singleline: { delimiter: 'semi', requireLast: false },
+        },
+      ],
     },
-}];
+  },
+  prettierConfig
+);

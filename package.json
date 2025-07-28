@@ -21,12 +21,16 @@
     "minify",
     "tool",
     "compress",
-    "optimization"
+    "optimization",
+    "multi-root ready"
   ],
+  "sponsor": {
+    "url": "https://github.com/sponsors/kallookoo"
+  },
   "activationEvents": [
     "onLanguage"
   ],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -38,21 +42,21 @@
       "editor/context": [
         {
           "command": "minifyplus.minify",
-          "when": "configuration.minifyplus.tools.enable != 'save'",
+          "when": "minifyplus.extensionEnabled && minifyplus.contextMenuEnabled",
           "group": "1_modification"
         }
       ],
       "editor/title/context": [
         {
           "command": "minifyplus.minify",
-          "when": "configuration.minifyplus.tools.enable != 'save'",
+          "when": "minifyplus.extensionEnabled && minifyplus.contextMenuEnabled",
           "group": "1_run"
         }
       ],
       "explorer/context": [
         {
           "command": "minifyplus.minify",
-          "when": "configuration.minifyplus.tools.enable != 'save'",
+          "when": "minifyplus.extensionEnabled && minifyplus.contextMenuEnabled",
           "group": "7_modification"
         }
       ]
@@ -83,6 +87,7 @@
         },
         "minifyplus.tools.mode": {
           "order": 1,
+          "scope": "resource",
           "type": "string",
           "default": "suffixOnly",
           "enum": [
@@ -104,6 +109,7 @@
         },
         "minifyplus.tools.languages": {
           "order": 2,
+          "scope": "resource",
           "type": "object",
           "items": {
             "type": "string"
@@ -119,12 +125,14 @@
         },
         "minifyplus.tools.useConfig": {
           "order": 3,
+          "scope": "resource",
           "type": "boolean",
           "default": true,
           "markdownDescription": "Use config files for minification options. **The `#minifyplus.tools.configuration#` (config) will be ignored.**"
         },
         "minifyplus.tools.configFiles": {
           "order": 4,
+          "scope": "resource",
           "type": "object",
           "items": {
             "type": "string"
@@ -142,6 +150,7 @@
         },
         "minifyplus.tools.configuration": {
           "order": 5,
+          "scope": "resource",
           "type": "object",
           "default": {
             "clean-css": {
@@ -166,18 +175,21 @@
         },
         "minifyplus.files.fileSuffix": {
           "order": 6,
+          "scope": "resource",
           "type": "string",
           "default": ".min",
           "description": "Suffix applied to minified files."
         },
         "minifyplus.files.subfolderName": {
           "order": 7,
+          "scope": "resource",
           "type": "string",
           "default": "min",
           "description": "Folder name for generated files."
         },
         "minifyplus.files.exclude": {
           "order": 8,
+          "scope": "resource",
           "type": "array",
           "items": {
             "type": "string"
@@ -192,19 +204,26 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && node esbuild.js --bundle --production",
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
+    "@eslint/js": "^9.32.0",
     "@types/node": "^22.15.1",
     "@types/vscode": "^1.102.0",
-    "@typescript-eslint/eslint-plugin": "^8.38.0",
-    "@typescript-eslint/parser": "^8.38.0",
+    "esbuild": "^0.25.8",
     "eslint": "^9.32.0",
-    "typescript": "^5.8.3"
-  },
-  "dependencies": {
+    "eslint-config-prettier": "^10.1.8",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.6.2",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0",
     "clean-css": "^5.3.3",
     "terser": "^5.43.1"
   }

@@ -1,8 +1,9 @@
-.github/**
-.vscode/**
+.github
+.vscode
 src/**
 .gitignore
 **/tsconfig.json
+**/esbuild.js
 **/eslint.config.mjs
+**/prettier.config.mjs
 **/*.map
-**/*.ts
